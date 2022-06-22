@@ -1,0 +1,62 @@
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /addData:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create new pdf
+      parameters:
+      - in: formData
+        name: address
+        type: string
+      - in: formData
+        name: name
+        type: string
+      - in: formData
+        name: phoneNumber
+        type: integer
+      - in: formData
+        name: zipAddress
+        type: integer
+      - description: products
+        in: formData
+        items:
+          type: string
+        name: products
+        required: true
+        type: array
+      - description: logo
+        in: formData
+        name: logo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create new pdf
+      tags:
+      - GeneratePDF
+swagger: "2.0"
