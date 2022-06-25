@@ -26,7 +26,7 @@ const docTemplate = `{
     "paths": {
         "/addData": {
             "post": {
-                "description": "Create new pdf",
+                "description": "Create new pdf from scratch",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -34,9 +34,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "GeneratePDF"
+                    "GeneratePDF1"
                 ],
-                "summary": "Create new pdf",
+                "summary": "Create new pdf from scratch",
                 "parameters": [
                     {
                         "type": "string",
@@ -57,6 +57,101 @@ const docTemplate = `{
                         "type": "integer",
                         "name": "zipAddress",
                         "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "products",
+                        "name": "products",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "logo",
+                        "name": "logo",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/addToTemplate": {
+            "post": {
+                "description": "Create new pdf with positions",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GeneratePDF"
+                ],
+                "summary": "Create new pdf with positions",
+                "parameters": [
+                    {
+                        "type": "object",
+                        "description": "name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "object",
+                        "description": "phoneNumber",
+                        "name": "phoneNumber",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "object",
+                        "description": "zipAddress",
+                        "name": "zipAddress",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "object",
+                        "description": "address",
+                        "name": "address",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "object",
+                        "description": "logoData",
+                        "name": "logoData",
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "array",

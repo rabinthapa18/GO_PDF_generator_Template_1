@@ -28,19 +28,11 @@ func main() {
 
 	router := gin.Default()
 
-	// v1 := router.Group("")
-	// {
-	// 	pdfData := v1.Group("/addData")
-	// 	{
-	// 		pdfData.POST("", api.AddData)
-	// 	}
-	// }
-
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// router.GET("/getData", api.GetData)
-
-	router.POST("/addData", api.AddData)
+	// router.POST("/addData", api.GenerateTemp1)
+	router.POST("/addToTemplate", api.AddToTemplate)
 
 	router.Run("localhost:3000")
+
 }

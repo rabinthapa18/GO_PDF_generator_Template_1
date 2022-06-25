@@ -11,7 +11,7 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: Create new pdf
+      description: Create new pdf from scratch
       parameters:
       - in: formData
         name: address
@@ -56,7 +56,72 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Create new pdf
+      summary: Create new pdf from scratch
+      tags:
+      - GeneratePDF1
+  /addToTemplate:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create new pdf with positions
+      parameters:
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: object
+      - description: phoneNumber
+        in: formData
+        name: phoneNumber
+        required: true
+        type: object
+      - description: zipAddress
+        in: formData
+        name: zipAddress
+        required: true
+        type: object
+      - description: address
+        in: formData
+        name: address
+        required: true
+        type: object
+      - description: logoData
+        in: formData
+        name: logoData
+        required: true
+        type: object
+      - description: products
+        in: formData
+        items:
+          type: string
+        name: products
+        required: true
+        type: array
+      - description: logo
+        in: formData
+        name: logo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create new pdf with positions
       tags:
       - GeneratePDF
 swagger: "2.0"
