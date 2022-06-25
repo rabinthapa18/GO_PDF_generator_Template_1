@@ -1,3 +1,51 @@
+definitions:
+  models.LogoData:
+    properties:
+      height:
+        type: integer
+      width:
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  models.address:
+    properties:
+      address:
+        type: string
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  models.name:
+    properties:
+      name:
+        type: string
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  models.phoneNumber:
+    properties:
+      phoneNumber:
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  models.zipAddress:
+    properties:
+      x:
+        type: integer
+      "y":
+        type: integer
+      zipAddress:
+        type: integer
+    type: object
 info:
   contact:
     email: support@swagger.io

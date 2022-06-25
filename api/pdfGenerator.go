@@ -58,6 +58,7 @@ func GenerateTemp1(pdfData *gin.Context) {
 // @Tags         GeneratePDF
 // @Accept       multipart/form-data
 // @Produce      json
+// @Param        rawData formData models.RawData true "rawData"
 // @Param        name formData object true "name"
 // @Param		 phoneNumber formData object true "phoneNumber"
 // @Param 		 zipAddress formData object true "zipAddress"
