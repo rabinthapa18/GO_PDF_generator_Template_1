@@ -1,9 +1,13 @@
 package controllers
 
 import (
+	"bytes"
 	"grrow_pdf/models"
+	"io"
 	"io/ioutil"
+	"os"
 	"strconv"
+	"time"
 
 	npdf "github.com/dslipak/pdf"
 	"github.com/phpdave11/gofpdf"
@@ -14,18 +18,30 @@ func GeneratePDF(data models.RawData) {
 	// Create a new PDF document =========================================
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
+	// reading the template file received via API
+	temp, _ := ioutil.ReadAll(data.Template)
+
+	templateName := strconv.Itoa(int(time.Now().UnixNano()))
+
+	// saving the template file to storage
+	ioutil.WriteFile("templates/"+templateName+".pdf", temp, 0644)
+
 	// get number of pages from template file ============================
 	contents, err := npdf.Open("templates/pdf-template-1.pdf")
 	if err != nil {
 		panic(err)
 	}
-
 	numberOfPages := contents.NumPage()
+
+	// changing template received from api to readseeker
+	if err != nil {
+		panic(err)
+	}
+	template := io.ReadSeeker(bytes.NewReader(temp))
 
 	// Add a page to the document ========================================
 	for i := 1; i <= numberOfPages; i++ {
-		// Import example-pdf.pdf with gofpdi free pdf document importer
-		page := gofpdi.ImportPage(pdf, "templates/pdf-template-1.pdf", i, "/MediaBox")
+		page := gofpdi.ImportPageFromStream(pdf, &template, 1, "/MediaBox")
 
 		pdf.AddPage()
 
@@ -39,6 +55,13 @@ func GeneratePDF(data models.RawData) {
 	if err != nil {
 		panic(err)
 	}
+
+	// delete the template file from storage
+	err = os.Remove("templates/" + templateName + ".pdf")
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 // write data on pdf

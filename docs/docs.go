@@ -169,6 +169,13 @@ const docTemplate = `{
                         "name": "logo",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "template",
+                        "name": "template",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {

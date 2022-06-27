@@ -150,6 +150,11 @@ paths:
         name: logo
         required: true
         type: file
+      - description: template
+        in: formData
+        name: template
+        required: true
+        type: file
       produces:
       - application/json
       responses:
