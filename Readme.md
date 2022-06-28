@@ -11,4 +11,4 @@
 #### POSTMAN request
 
 <br>
-![image.png](.media/img_0.png)
+![image](./images/img_0.png)
