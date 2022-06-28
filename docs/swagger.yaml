@@ -14,6 +14,8 @@ definitions:
     properties:
       address:
         type: string
+      size:
+        type: integer
       x:
         type: integer
       "y":
@@ -23,6 +25,8 @@ definitions:
     properties:
       name:
         type: string
+      size:
+        type: integer
       x:
         type: integer
       "y":
@@ -32,6 +36,8 @@ definitions:
     properties:
       phoneNumber:
         type: integer
+      size:
+        type: integer
       x:
         type: integer
       "y":
@@ -39,6 +45,8 @@ definitions:
     type: object
   models.zipAddress:
     properties:
+      size:
+        type: integer
       x:
         type: integer
       "y":

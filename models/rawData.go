@@ -15,24 +15,28 @@ type RawData struct {
 
 type name struct {
 	Name string `json:"name"`
+	Size int    `json:"size"`
 	X    int    `json:"x"`
 	Y    int    `json:"y"`
 }
 
 type phoneNumber struct {
 	PhoneNumber int `json:"phoneNumber"`
+	Size        int `json:"size"`
 	X           int `json:"x"`
 	Y           int `json:"y"`
 }
 
 type zipAddress struct {
 	ZipAddress int `json:"zipAddress"`
+	Size       int `json:"size"`
 	X          int `json:"x"`
 	Y          int `json:"y"`
 }
 
 type address struct {
 	Address string `json:"address"`
+	Size    int    `json:"size"`
 	X       int    `json:"x"`
 	Y       int    `json:"y"`
 }
@@ -45,18 +49,21 @@ type Products struct {
 
 type productName struct {
 	Name string `json:"name"`
+	Size int    `json:"size"`
 	X    int    `json:"x"`
 	Y    int    `json:"y"`
 }
 
 type quantity struct {
 	Quantity int `json:"quantity"`
+	Size     int `json:"size"`
 	X        int `json:"x"`
 	Y        int `json:"y"`
 }
 
 type price struct {
 	Price int `json:"price"`
+	Size  int `json:"size"`
 	X     int `json:"x"`
 	Y     int `json:"y"`
 }

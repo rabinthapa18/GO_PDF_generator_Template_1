@@ -231,6 +231,9 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "size": {
+                    "type": "integer"
+                },
                 "x": {
                     "type": "integer"
                 },
@@ -244,6 +247,9 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "size": {
+                    "type": "integer"
                 },
                 "x": {
                     "type": "integer"
@@ -259,6 +265,9 @@ const docTemplate = `{
                 "phoneNumber": {
                     "type": "integer"
                 },
+                "size": {
+                    "type": "integer"
+                },
                 "x": {
                     "type": "integer"
                 },
@@ -270,6 +279,9 @@ const docTemplate = `{
         "models.zipAddress": {
             "type": "object",
             "properties": {
+                "size": {
+                    "type": "integer"
+                },
                 "x": {
                     "type": "integer"
                 },

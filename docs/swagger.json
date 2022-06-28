@@ -219,6 +219,9 @@
                 "address": {
                     "type": "string"
                 },
+                "size": {
+                    "type": "integer"
+                },
                 "x": {
                     "type": "integer"
                 },
@@ -232,6 +235,9 @@
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "size": {
+                    "type": "integer"
                 },
                 "x": {
                     "type": "integer"
@@ -247,6 +253,9 @@
                 "phoneNumber": {
                     "type": "integer"
                 },
+                "size": {
+                    "type": "integer"
+                },
                 "x": {
                     "type": "integer"
                 },
@@ -258,6 +267,9 @@
         "models.zipAddress": {
             "type": "object",
             "properties": {
+                "size": {
+                    "type": "integer"
+                },
                 "x": {
                     "type": "integer"
                 },
