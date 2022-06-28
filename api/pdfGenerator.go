@@ -111,6 +111,8 @@ func AddToTemplate(rawData *gin.Context) {
 		newData.LogoData = logoDataStruct
 	}
 
-	controllers.GeneratePDF(newData)
+	byteData := controllers.GeneratePDF(newData)
+
+	rawData.JSON(200, gin.H{"bufferData": byteData})
 
 }

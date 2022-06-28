@@ -14,7 +14,7 @@ import (
 	"github.com/phpdave11/gofpdf/contrib/gofpdi"
 )
 
-func GeneratePDF(data models.RawData) {
+func GeneratePDF(data models.RawData) []byte {
 	// Create a new PDF document =========================================
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
@@ -51,7 +51,9 @@ func GeneratePDF(data models.RawData) {
 
 	writeData(data, pdf)
 
-	err = pdf.OutputFileAndClose("pdfs/t1.pdf")
+	// Output the document to a file =====================================
+	fileName := strconv.Itoa(int(time.Now().UnixNano()))
+	err = pdf.OutputFileAndClose("pdfs/" + fileName + ".pdf")
 	if err != nil {
 		panic(err)
 	}
@@ -62,6 +64,12 @@ func GeneratePDF(data models.RawData) {
 		panic(err)
 	}
 
+	// change filename.pdf to bytes
+	pdfBytes, err := ioutil.ReadFile("pdfs/" + fileName + ".pdf")
+	if err != nil {
+		panic(err)
+	}
+	return pdfBytes
 }
 
 // write data on pdf
