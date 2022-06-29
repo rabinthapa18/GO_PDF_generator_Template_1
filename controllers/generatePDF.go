@@ -82,22 +82,22 @@ func GeneratePDF(data models.RawData) []byte {
 // write data on pdf
 func writeData(pdfData models.RawData, pdf *gofpdf.Fpdf) {
 	// print name
-	pdf.SetFont("Helvetica", "", float64(pdfData.Name.Size))
+	pdf.SetFont("Helvetica", "", fontSize(pdfData.Name.Size))
 	pdf.SetXY(float64(pdfData.Name.X), float64(pdfData.Name.Y))
 	pdf.Cell(40, 10, pdfData.Name.Name)
 
 	// print address
-	pdf.SetFont("Helvetica", "", float64(pdfData.Address.Size))
+	pdf.SetFont("Helvetica", "", fontSize(pdfData.Address.Size))
 	pdf.SetXY(float64(pdfData.Address.X), float64(pdfData.Address.Y))
 	pdf.Cell(40, 10, pdfData.Address.Address)
 
 	// print phone number
-	pdf.SetFont("Helvetica", "", float64(pdfData.PhoneNumber.Size))
+	pdf.SetFont("Helvetica", "", fontSize(pdfData.PhoneNumber.Size))
 	pdf.SetXY(float64(pdfData.PhoneNumber.X), float64(pdfData.PhoneNumber.Y))
 	pdf.Cell(40, 10, strconv.Itoa(pdfData.PhoneNumber.PhoneNumber))
 
 	// print zip code
-	pdf.SetFont("Helvetica", "", float64(pdfData.ZipAddress.Size))
+	pdf.SetFont("Helvetica", "", fontSize(pdfData.ZipAddress.Size))
 	pdf.SetXY(float64(pdfData.ZipAddress.X), float64(pdfData.ZipAddress.Y))
 	pdf.Cell(40, 10, strconv.Itoa(pdfData.ZipAddress.ZipAddress))
 
@@ -110,19 +110,30 @@ func writeData(pdfData models.RawData, pdf *gofpdf.Fpdf) {
 	for _, product := range pdfData.Products {
 
 		// print product name
-		pdf.SetFont("Helvetica", "", float64(product.ProductName.Size))
+		pdf.SetFont("Helvetica", "", fontSize(product.ProductName.Size))
 		pdf.SetXY(float64(product.ProductName.X), float64(product.ProductName.Y))
 		pdf.Cell(40, 10, product.ProductName.Name)
 
 		// print product quantity
-		pdf.SetFont("Helvetica", "", float64(product.ProductQuantity.Size))
+		pdf.SetFont("Helvetica", "", fontSize(product.ProductQuantity.Size))
 		pdf.SetXY(float64(product.ProductQuantity.X), float64(product.ProductQuantity.Y))
 		pdf.Cell(40, 10, strconv.Itoa(product.ProductQuantity.Quantity))
 
 		// print product price
-		pdf.SetFont("Helvetica", "", float64(product.ProductPrice.Size))
+		pdf.SetFont("Helvetica", "", fontSize(product.ProductPrice.Size))
 		pdf.SetXY(float64(product.ProductPrice.X), float64(product.ProductPrice.Y))
 		pdf.Cell(40, 10, strconv.Itoa(product.ProductPrice.Price))
 	}
 
+}
+
+func fontSize(size int) float64 {
+
+	fontSize := float64(12)
+
+	if size != 0 {
+		fontSize = float64(size)
+	}
+
+	return fontSize
 }
