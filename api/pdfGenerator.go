@@ -6,6 +6,7 @@ import (
 	"grrow_pdf/controllers"
 	"grrow_pdf/models"
 	"reflect"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,7 +67,6 @@ func GenerateTemp1(pdfData *gin.Context) {
 // @Param 		 logoData formData object true "logoData"
 // @Param		 products formData []string true "products"
 // @Param 	  	 logo formData file true "logo"
-// @Param 	  	 template formData file true "template"
 // @Success      200  {string}  models.RawData
 // @Failure      400  {string}  error
 // @Failure      404  {string}  error
@@ -98,9 +98,6 @@ func AddToTemplate(rawData *gin.Context) {
 	logo, _, _ := rawData.Request.FormFile("logo")
 	newData.Logo = logo
 
-	template, _, _ := rawData.Request.FormFile("template")
-	newData.Template = template
-
 	if newData.LogoData.Height == 0 {
 		logoData := rawData.PostForm("logoData")
 		logoDataStruct := models.LogoData{}
@@ -110,6 +107,8 @@ func AddToTemplate(rawData *gin.Context) {
 		}
 		newData.LogoData = logoDataStruct
 	}
+
+	newData.Template, _ = strconv.Atoi(rawData.PostForm("template"))
 
 	byteData := controllers.GeneratePDF(newData)
 

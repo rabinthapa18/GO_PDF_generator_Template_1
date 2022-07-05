@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"bytes"
+	"context"
+	"fmt"
 	"grrow_pdf/models"
 	"io"
 	"io/ioutil"
@@ -12,28 +14,51 @@ import (
 	npdf "github.com/dslipak/pdf"
 	"github.com/phpdave11/gofpdf"
 	"github.com/phpdave11/gofpdf/contrib/gofpdi"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 func GeneratePDF(data models.RawData) []byte {
+
+	// pdf path =========================================================
+	pdfPath := "pdfs/PDF_" + time.Now().Format("2006-01-02_15-04-05") + ".pdf"
+
+	//downloading template from aws ======================================
+	svc := GetS3()
+	input := &s3.GetObjectInput{
+		Bucket: aws.String("grrow.pdf.generator"),
+		Key:    aws.String("pdf-template-" + strconv.Itoa(data.Template) + ".pdf"),
+	}
+	req, out := svc.GetObject(context.TODO(), input)
+	if out != nil {
+		fmt.Println(out.Error())
+	}
+	defer req.Body.Close()
+
+	// reading the template file received via API ========================
+	temp, _ := ioutil.ReadAll(req.Body)
+
+	// saving the template file to storage
+	ioutil.WriteFile(pdfPath, temp, 0644)
+
 	// Create a new PDF document =========================================
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
-	// reading the template file received via API
-	temp, _ := ioutil.ReadAll(data.Template)
-
-	templateName := strconv.Itoa(int(time.Now().UnixNano()))
-
-	// saving the template file to storage
-	ioutil.WriteFile("templates/"+templateName+".pdf", temp, 0644)
-
 	// get number of pages from template file ============================
-	contents, err := npdf.Open("templates/pdf-template-1.pdf")
+	c, e := npdf.NewReader(bytes.NewReader(temp), 0644)
+	if e != nil {
+		fmt.Println(e)
+	}
+	pages := c.NumPage()
+	fmt.Println(pages)
+	contents, err := npdf.Open(pdfPath)
 	if err != nil {
 		panic(err)
 	}
 	numberOfPages := contents.NumPage()
 
-	// changing template received from api to readseeker
+	// changing template received from api to readseeker==================
 	if err != nil {
 		panic(err)
 	}
@@ -51,27 +76,23 @@ func GeneratePDF(data models.RawData) []byte {
 
 	writeData(data, pdf)
 
+	// Output the document ==============================================
+	// buff := pdf.Output()
+
 	// Output the document to a file =====================================
-	fileName := strconv.Itoa(int(time.Now().UnixNano()))
-	err = pdf.OutputFileAndClose("pdfs/" + fileName + ".pdf")
+	err = pdf.OutputFileAndClose(pdfPath)
 	if err != nil {
 		panic(err)
 	}
 
-	// delete the template file from storage
-	err = os.Remove("templates/" + templateName + ".pdf")
+	// change generated PDF to bytes
+	pdfBytes, err := ioutil.ReadFile(pdfPath)
 	if err != nil {
 		panic(err)
 	}
 
-	// change filename.pdf to bytes
-	pdfBytes, err := ioutil.ReadFile("pdfs/" + fileName + ".pdf")
-	if err != nil {
-		panic(err)
-	}
-
-	// delete the pdf file from storage
-	err = os.Remove("pdfs/" + fileName + ".pdf")
+	// delete the PDF file from local storage
+	err = os.Remove(pdfPath)
 	if err != nil {
 		panic(err)
 	}

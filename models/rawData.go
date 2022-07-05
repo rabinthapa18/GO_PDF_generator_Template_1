@@ -10,7 +10,7 @@ type RawData struct {
 	Products    []Products     `form:"products" binding:"requried" swaggerignore:"true"`
 	LogoData    LogoData       `form:"logoData"`
 	Logo        multipart.File `form:"logo" binding:"required" swaggerignore:"true"`
-	Template    multipart.File `form:"template" binding:"required" swaggerignore:"true"`
+	Template    int            `form:"template" binding:"required"`
 }
 
 type name struct {

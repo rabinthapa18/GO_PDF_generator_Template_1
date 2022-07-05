@@ -121,6 +121,10 @@ paths:
       - multipart/form-data
       description: Create new pdf with positions
       parameters:
+      - in: formData
+        name: template
+        required: true
+        type: integer
       - description: name
         in: formData
         name: name
@@ -156,11 +160,6 @@ paths:
       - description: logo
         in: formData
         name: logo
-        required: true
-        type: file
-      - description: template
-        in: formData
-        name: template
         required: true
         type: file
       produces:

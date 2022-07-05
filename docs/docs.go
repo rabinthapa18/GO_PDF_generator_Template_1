@@ -119,6 +119,12 @@ const docTemplate = `{
                 "summary": "Create new pdf with positions",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "template",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
                         "type": "object",
                         "description": "name",
                         "name": "name",
@@ -167,13 +173,6 @@ const docTemplate = `{
                         "type": "file",
                         "description": "logo",
                         "name": "logo",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "template",
-                        "name": "template",
                         "in": "formData",
                         "required": true
                     }

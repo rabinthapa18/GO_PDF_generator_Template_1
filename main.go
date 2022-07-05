@@ -28,6 +28,8 @@ func main() {
 
 	router := gin.Default()
 
+	// controllers.GetS3()
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// router.POST("/addData", api.GenerateTemp1)
