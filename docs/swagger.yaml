@@ -3,6 +3,40 @@ definitions:
     properties:
       height:
         type: integer
+      pageNo:
+        type: integer
+      width:
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  models.RawData:
+    properties:
+      address:
+        $ref: '#/definitions/models.address'
+      logoData:
+        $ref: '#/definitions/models.LogoData'
+      name:
+        $ref: '#/definitions/models.name'
+      phoneNumber:
+        $ref: '#/definitions/models.phoneNumber'
+      sealData:
+        $ref: '#/definitions/models.SealData'
+      template:
+        type: integer
+      zipAddress:
+        $ref: '#/definitions/models.zipAddress'
+    required:
+    - template
+    type: object
+  models.SealData:
+    properties:
+      height:
+        type: integer
+      pageNo:
+        type: integer
       width:
         type: integer
       x:
@@ -14,6 +48,8 @@ definitions:
     properties:
       address:
         type: string
+      pageNo:
+        type: integer
       size:
         type: integer
       x:
@@ -25,6 +61,8 @@ definitions:
     properties:
       name:
         type: string
+      pageNo:
+        type: integer
       size:
         type: integer
       x:
@@ -34,6 +72,8 @@ definitions:
     type: object
   models.phoneNumber:
     properties:
+      pageNo:
+        type: integer
       phoneNumber:
         type: integer
       size:
@@ -45,6 +85,8 @@ definitions:
     type: object
   models.zipAddress:
     properties:
+      pageNo:
+        type: integer
       size:
         type: integer
       x:
@@ -121,47 +163,12 @@ paths:
       - multipart/form-data
       description: Create new pdf with positions
       parameters:
-      - in: formData
-        name: template
+      - description: rawData
+        in: body
+        name: rawData
         required: true
-        type: integer
-      - description: name
-        in: formData
-        name: name
-        required: true
-        type: object
-      - description: phoneNumber
-        in: formData
-        name: phoneNumber
-        required: true
-        type: object
-      - description: zipAddress
-        in: formData
-        name: zipAddress
-        required: true
-        type: object
-      - description: address
-        in: formData
-        name: address
-        required: true
-        type: object
-      - description: logoData
-        in: formData
-        name: logoData
-        required: true
-        type: object
-      - description: products
-        in: formData
-        items:
-          type: string
-        name: products
-        required: true
-        type: array
-      - description: logo
-        in: formData
-        name: logo
-        required: true
-        type: file
+        schema:
+          $ref: '#/definitions/models.RawData'
       produces:
       - application/json
       responses:

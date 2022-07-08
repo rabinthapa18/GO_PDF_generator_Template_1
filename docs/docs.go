@@ -119,62 +119,13 @@ const docTemplate = `{
                 "summary": "Create new pdf with positions",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "name": "template",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "object",
-                        "description": "name",
-                        "name": "name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "object",
-                        "description": "phoneNumber",
-                        "name": "phoneNumber",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "object",
-                        "description": "zipAddress",
-                        "name": "zipAddress",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "object",
-                        "description": "address",
-                        "name": "address",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "object",
-                        "description": "logoData",
-                        "name": "logoData",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "description": "products",
-                        "name": "products",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "logo",
-                        "name": "logo",
-                        "in": "formData",
-                        "required": true
+                        "description": "rawData",
+                        "name": "rawData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.RawData"
+                        }
                     }
                 ],
                 "responses": {
@@ -213,6 +164,58 @@ const docTemplate = `{
                 "height": {
                     "type": "integer"
                 },
+                "pageNo": {
+                    "type": "integer"
+                },
+                "width": {
+                    "type": "integer"
+                },
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.RawData": {
+            "type": "object",
+            "required": [
+                "template"
+            ],
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/models.address"
+                },
+                "logoData": {
+                    "$ref": "#/definitions/models.LogoData"
+                },
+                "name": {
+                    "$ref": "#/definitions/models.name"
+                },
+                "phoneNumber": {
+                    "$ref": "#/definitions/models.phoneNumber"
+                },
+                "sealData": {
+                    "$ref": "#/definitions/models.SealData"
+                },
+                "template": {
+                    "type": "integer"
+                },
+                "zipAddress": {
+                    "$ref": "#/definitions/models.zipAddress"
+                }
+            }
+        },
+        "models.SealData": {
+            "type": "object",
+            "properties": {
+                "height": {
+                    "type": "integer"
+                },
+                "pageNo": {
+                    "type": "integer"
+                },
                 "width": {
                     "type": "integer"
                 },
@@ -229,6 +232,9 @@ const docTemplate = `{
             "properties": {
                 "address": {
                     "type": "string"
+                },
+                "pageNo": {
+                    "type": "integer"
                 },
                 "size": {
                     "type": "integer"
@@ -247,6 +253,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "pageNo": {
+                    "type": "integer"
+                },
                 "size": {
                     "type": "integer"
                 },
@@ -261,6 +270,9 @@ const docTemplate = `{
         "models.phoneNumber": {
             "type": "object",
             "properties": {
+                "pageNo": {
+                    "type": "integer"
+                },
                 "phoneNumber": {
                     "type": "integer"
                 },
@@ -278,6 +290,9 @@ const docTemplate = `{
         "models.zipAddress": {
             "type": "object",
             "properties": {
+                "pageNo": {
+                    "type": "integer"
+                },
                 "size": {
                     "type": "integer"
                 },
