@@ -1,23 +1,22 @@
 package models
 
-import "mime/multipart"
-
 type RawData struct {
-	Name        name           `form:"name"`
-	PhoneNumber phoneNumber    `form:"phoneNumber"`
-	ZipAddress  zipAddress     `form:"zipAddress"`
-	Address     address        `form:"address"`
-	Products    []Products     `form:"products" binding:"requried" swaggerignore:"true"`
-	LogoData    LogoData       `form:"logoData"`
-	Logo        multipart.File `form:"logo" binding:"required" swaggerignore:"true"`
-	Template    int            `form:"template" binding:"required"`
+	Name        name        `json:"name"`
+	PhoneNumber phoneNumber `json:"phoneNumber"`
+	ZipAddress  zipAddress  `json:"zipAddress"`
+	Address     address     `json:"address"`
+	Products    []Products  `json:"products" swaggerignore:"true"`
+	LogoData    LogoData    `json:"logoData"`
+	SealData    SealData    `json:"sealData"`
+	Template    int         `json:"template" binding:"required"`
 }
 
 type name struct {
-	Name string `json:"name"`
-	Size int    `json:"size"`
-	X    int    `json:"x"`
-	Y    int    `json:"y"`
+	Name   string `json:"name"`
+	Size   int    `json:"size"`
+	X      int    `json:"x"`
+	Y      int    `json:"y"`
+	PageNo int    `json:"pageNo"`
 }
 
 type phoneNumber struct {
@@ -25,6 +24,7 @@ type phoneNumber struct {
 	Size        int `json:"size"`
 	X           int `json:"x"`
 	Y           int `json:"y"`
+	PageNo      int `json:"pageNo"`
 }
 
 type zipAddress struct {
@@ -32,6 +32,7 @@ type zipAddress struct {
 	Size       int `json:"size"`
 	X          int `json:"x"`
 	Y          int `json:"y"`
+	PageNo     int `json:"pageNo"`
 }
 
 type address struct {
@@ -39,6 +40,7 @@ type address struct {
 	Size    int    `json:"size"`
 	X       int    `json:"x"`
 	Y       int    `json:"y"`
+	PageNo  int    `json:"pageNo"`
 }
 
 type Products struct {
@@ -48,10 +50,11 @@ type Products struct {
 }
 
 type productName struct {
-	Name string `json:"name"`
-	Size int    `json:"size"`
-	X    int    `json:"x"`
-	Y    int    `json:"y"`
+	Name   string `json:"name"`
+	Size   int    `json:"size"`
+	X      int    `json:"x"`
+	Y      int    `json:"y"`
+	PageNo int    `json:"pageNo"`
 }
 
 type quantity struct {
@@ -59,13 +62,15 @@ type quantity struct {
 	Size     int `json:"size"`
 	X        int `json:"x"`
 	Y        int `json:"y"`
+	PageNo   int `json:"pageNo"`
 }
 
 type price struct {
-	Price int `json:"price"`
-	Size  int `json:"size"`
-	X     int `json:"x"`
-	Y     int `json:"y"`
+	Price  int `json:"price"`
+	Size   int `json:"size"`
+	X      int `json:"x"`
+	Y      int `json:"y"`
+	PageNo int `json:"pageNo"`
 }
 
 type LogoData struct {
@@ -73,4 +78,13 @@ type LogoData struct {
 	Y      int `json:"y"`
 	Width  int `json:"width"`
 	Height int `json:"height"`
+	PageNo int `json:"pageNo"`
+}
+
+type SealData struct {
+	X      int `json:"x"`
+	Y      int `json:"y"`
+	Width  int `json:"width"`
+	Height int `json:"height"`
+	PageNo int `json:"pageNo"`
 }
