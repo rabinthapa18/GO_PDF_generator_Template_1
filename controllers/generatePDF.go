@@ -5,15 +5,13 @@ import (
 	"context"
 	"fmt"
 	"grrow_pdf/models"
-	"io"
 	"io/ioutil"
 	"os"
 	"strconv"
-	"time"
 
 	npdf "github.com/dslipak/pdf"
-	"github.com/phpdave11/gofpdf"
-	"github.com/phpdave11/gofpdf/contrib/gofpdi"
+	"github.com/jung-kurt/gofpdf"
+	"github.com/jung-kurt/gofpdf/contrib/gofpdi"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -21,11 +19,11 @@ import (
 
 func GeneratePDF(data models.RawData) []byte {
 
-	// pdf path =========================================================
-	pdfPath := "pdfs/PDF_" + time.Now().Format("2006-01-02_15-04-05") + ".pdf"
-
 	//downloading files from aws ======================================
 	temp, logoByte, sealByte := getFiles(data.Template)
+
+	// pdf path =========================================================
+	pdfPath := "temp.pdf"
 
 	// saving the template file to storage
 	ioutil.WriteFile(pdfPath, temp, 0644)
@@ -41,11 +39,11 @@ func GeneratePDF(data models.RawData) []byte {
 	numberOfPages := contents.NumPage()
 
 	// changing template received from api to readseeker==================
-	template := io.ReadSeeker(bytes.NewReader(temp))
+	// template := io.ReadSeeker(bytes.NewReader(temp))
 
 	// Add a page to the document ========================================
 	for i := 1; i <= numberOfPages; i++ {
-		page := gofpdi.ImportPageFromStream(pdf, &template, i, "/MediaBox")
+		page := gofpdi.ImportPage(pdf, "temp.pdf", i, "/MediaBox")
 
 		pdf.AddPage()
 
@@ -73,18 +71,21 @@ func GeneratePDF(data models.RawData) []byte {
 		panic(err)
 	}
 
+	// delete the PDF file from aws storage
+	deleteFile(data.Template)
+
 	return pdfBytes
 }
 
 // downloading files from aws ===========================================
-func getFiles(tempInt int) ([]byte, []byte, []byte) {
+func getFiles(tempInt string) ([]byte, []byte, []byte) {
 
 	svc := GetS3()
 
 	// download template ================================================
 	pdfTemplate := &s3.GetObjectInput{
 		Bucket: aws.String("grrow.pdf.generator"),
-		Key:    aws.String("pdf-template-" + strconv.Itoa(tempInt) + ".pdf"),
+		Key:    aws.String(tempInt),
 	}
 	req1, out := svc.GetObject(context.TODO(), pdfTemplate)
 	if out != nil {
@@ -123,6 +124,19 @@ func getFiles(tempInt int) ([]byte, []byte, []byte) {
 
 	return temp, logoByte, sealByte
 
+}
+
+// delete file from s3 server ============================================
+func deleteFile(key string) {
+	svc := GetS3()
+	input := &s3.DeleteObjectInput{
+		Bucket: aws.String("grrow.pdf.generator"),
+		Key:    aws.String(key),
+	}
+	_, err := svc.DeleteObject(context.TODO(), input)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 // write data on pdf

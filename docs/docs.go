@@ -108,7 +108,7 @@ const docTemplate = `{
             "post": {
                 "description": "Create new pdf with positions",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -126,6 +126,56 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.RawData"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/uploadTemplate": {
+            "post": {
+                "description": "Upload template to S3",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UploadTemplate"
+                ],
+                "summary": "Upload template to S3",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -200,7 +250,7 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.SealData"
                 },
                 "template": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "zipAddress": {
                     "$ref": "#/definitions/models.zipAddress"

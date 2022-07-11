@@ -1,12 +1,16 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"grrow_pdf/controllers"
 	"grrow_pdf/models"
 	"reflect"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/gin-gonic/gin"
 )
 
@@ -56,7 +60,7 @@ func GenerateTemp1(pdfData *gin.Context) {
 // @Summary      Create new pdf with positions
 // @Description  Create new pdf with positions
 // @Tags         GeneratePDF
-// @Accept       multipart/form-data
+// @Accept       application/json
 // @Produce      json
 // @Param        rawData body models.RawData true "rawData"
 // @Success      200  {string}  models.RawData
@@ -100,5 +104,48 @@ func AddToTemplate(rawData *gin.Context) {
 	byteData := controllers.GeneratePDF(newData)
 
 	rawData.JSON(200, gin.H{"bufferData": byteData})
+
+}
+
+// upload template to S3 api
+// @Summary      Upload template to S3
+// @Description  Upload template to S3
+// @Tags         UploadTemplate
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        file formData file true "file"
+// @Success      200  {string}  message
+// @Failure      400  {string}  error
+// @Failure      404  {string}  error
+// @Failure      500  {string}  error
+// @Router       /uploadTemplate [POST]
+func UploadTemplate(rawData *gin.Context) {
+
+	file, header, err := rawData.Request.FormFile("file")
+
+	if err != nil {
+		rawData.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	defer file.Close()
+
+	filename := header.Filename
+
+	svc := controllers.GetS3()
+
+	uploader := manager.NewUploader(svc)
+	result, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
+		Bucket: aws.String("grrow.pdf.generator"),
+		Key:    aws.String(filename),
+		Body:   file,
+	})
+
+	if err != nil {
+		rawData.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	rawData.JSON(200, gin.H{"result": result})
 
 }

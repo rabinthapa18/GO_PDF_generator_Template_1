@@ -25,7 +25,7 @@ definitions:
       sealData:
         $ref: '#/definitions/models.SealData'
       template:
-        type: integer
+        type: string
       zipAddress:
         $ref: '#/definitions/models.zipAddress'
     required:
@@ -160,7 +160,7 @@ paths:
   /addToTemplate:
     post:
       consumes:
-      - multipart/form-data
+      - application/json
       description: Create new pdf with positions
       parameters:
       - description: rawData
@@ -191,4 +191,37 @@ paths:
       summary: Create new pdf with positions
       tags:
       - GeneratePDF
+  /uploadTemplate:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload template to S3
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Upload template to S3
+      tags:
+      - UploadTemplate
 swagger: "2.0"

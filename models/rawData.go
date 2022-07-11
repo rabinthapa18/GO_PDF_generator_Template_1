@@ -8,7 +8,7 @@ type RawData struct {
 	Products    []Products  `json:"products" swaggerignore:"true"`
 	LogoData    LogoData    `json:"logoData"`
 	SealData    SealData    `json:"sealData"`
-	Template    int         `json:"template" binding:"required"`
+	Template    string      `json:"template"`
 }
 
 type name struct {

@@ -35,6 +35,8 @@ func main() {
 	// router.POST("/addData", api.GenerateTemp1)
 	router.POST("/addToTemplate", api.AddToTemplate)
 
+	router.POST("/uploadTemplate", api.UploadTemplate)
+
 	router.Run("localhost:3000")
 
 }
