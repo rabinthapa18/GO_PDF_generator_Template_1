@@ -1,0 +1,64 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+</head>
+
+<body>
+
+    <form id="generateForm">
+
+        <label for="file">Upload template file here</label>
+        <br>
+        <input type="file" id="file" name="file" />
+        <br>
+        <br>
+        <label for="request">enter request here</label>
+        <br>
+        <textarea id="request" name="request" cols="30" rows="10"></textarea>
+        <br>
+        <br>
+        <input type="submit" value="Generate PDF">
+    </form>
+
+    <script>
+        document.getElementById('generateForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var template = formData.get('file');
+            fetch('http://localhost:3000/uploadTemplate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: {
+                    template: template
+                }
+            }).then(function (response) {
+                fetch('http://localhost:3000/addToTemplate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        request: formData.get('request')
+                    })
+                }).then(function (response) {
+                    return response.blob();
+                }).then(function (blob) {
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'generated.pdf';
+                    a.click();
+                });
+            })
+        });
+    </script>
+
+</body>
+
+</html>

@@ -5,8 +5,6 @@ import (
 	"log"
 	"os"
 
-	"grrow_pdf/env"
-
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -34,7 +32,7 @@ func GetAllBuckets(c context.Context, api S3ListBucketsAPI, input *s3.ListBucket
 }
 
 func GetS3() (awsS3Client *s3.Client) {
-	env.Config()
+	// env.Config()
 
 	creds := credentials.NewStaticCredentialsProvider(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), "")
 
