@@ -29,6 +29,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1
 	github.com/boombuler/barcode v1.0.1 // indirect
 	github.com/dslipak/pdf v0.0.1
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect

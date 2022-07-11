@@ -9,7 +9,9 @@ package main
 
 import (
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -30,6 +32,17 @@ func main() {
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	router := gin.Default()
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		MaxAge:           12 * time.Hour,
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return true
+		},
+	}))
 
 	// controllers.GetS3()
 

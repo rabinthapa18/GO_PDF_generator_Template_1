@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"grrow_pdf/models"
 	"io/ioutil"
-	"os"
 	"strconv"
 
 	npdf "github.com/dslipak/pdf"
@@ -65,14 +64,14 @@ func GeneratePDF(data models.RawData) []byte {
 		panic(err)
 	}
 
-	// delete the PDF file from local storage
-	err = os.Remove(pdfPath)
-	if err != nil {
-		panic(err)
-	}
-
 	// delete the PDF file from aws storage
 	deleteFile(data.Template)
+
+	// delete the PDF file from local storage
+	// err = os.Remove(pdfPath)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	return pdfBytes
 }

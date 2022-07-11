@@ -9,53 +9,63 @@
 
 <body>
 
-    <form id="generateForm">
-
-        <label for="file">Upload template file here</label>
-        <br>
-        <input type="file" id="file" name="file" />
-        <br>
-        <br>
-        <label for="request">enter request here</label>
-        <br>
-        <textarea id="request" name="request" cols="30" rows="10"></textarea>
-        <br>
-        <br>
-        <input type="submit" value="Generate PDF">
-    </form>
+    <label for="file">Upload template file here</label>
+    <br>
+    <input type="file" id="file" name="file" />
+    <br>
+    <br>
+    <label for="request">enter request here</label>
+    <br>
+    <textarea id="request" name="request" cols="30" rows="10"></textarea>
+    <br>
+    <br>
+    <input type="submit" id="generateForm" value="Generate PDF">
 
     <script>
-        document.getElementById('generateForm').addEventListener('submit', function (e) {
+        document.getElementById('generateForm').addEventListener('click', function (e) {
             e.preventDefault();
-            var formData = new FormData(this);
-            var template = formData.get('file');
+            var request = document.getElementById('request').value;
+            var file = document.getElementById('file').files[0];
+
+            console.log(request);
+
+            // var fileName = file.name;
+
+            var formData = new FormData();
+            formData.append('file', file);
             fetch('http://localhost:3000/uploadTemplate', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                body: {
-                    template: template
-                }
+                body: formData
             }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
                 fetch('http://localhost:3000/addToTemplate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        request: formData.get('request')
-                    })
+                    body: request
                 }).then(function (response) {
-                    return response.blob();
-                }).then(function (blob) {
-                    var url = window.URL.createObjectURL(blob);
-                    var a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'generated.pdf';
-                    a.click();
+                    return response.json();
+                }).then(function (data) {
+                    // download the file
+                    // var a = document.createElement('a');
+                    // a.href = "data:application/pdf;base64," + data.bufferData;
+                    // a.download = "test.pdf";
+                    // a.click();
+
+                    var obj = document.createElement('object');
+                    obj.style.width = '100%';
+                    obj.style.height = '842pt';
+                    obj.type = 'application/pdf';
+                    obj.data = 'data:application/pdf;base64,' + data.bufferData;
+                    document.body.appendChild(obj);
+
                 });
-            })
+            });
+
+
+
         });
     </script>
 
