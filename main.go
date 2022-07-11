@@ -8,6 +8,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,6 +19,7 @@ import (
 )
 
 func main() {
+	// env.Config()
 
 	// Swagger 2.0 Meta Information
 	docs.SwaggerInfo.Title = "GROW PDF API"
@@ -37,6 +40,6 @@ func main() {
 
 	router.POST("/uploadTemplate", api.UploadTemplate)
 
-	router.Run("localhost:3000")
+	router.Run(os.Getenv("PORT"))
 
 }

@@ -32,7 +32,6 @@ func GetAllBuckets(c context.Context, api S3ListBucketsAPI, input *s3.ListBucket
 }
 
 func GetS3() (awsS3Client *s3.Client) {
-	// env.Config()
 
 	creds := credentials.NewStaticCredentialsProvider(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), "")
 
