@@ -17,13 +17,11 @@
 
 > **Template name should be same as name used during upload PDF api**
 
-> You can find index.html inside the HTML folder where you can upload template and write the request as you would write in postman ot swagger (in JSON) and it will render the PDF inside the webpage from which you can download it or print it from there.
+> AFTER STARTING THE APP, YOU CAN VISIT "/" IN YOU BROWSER ACCORDING TO YOU SERVER AND USE IT (FOR EXAMPLE : "localhost:3000/"). THIS WILL REDIRECT YOU TO A PAGE WHERE YOU CAN UPLOAD AND WRITE DATA AND PDF WILL OPEN IN NEW PAGE.
 
-_We will have to change API URL in fetch functions inside the HTML and set the config vars for the AWS account._
+### <span style="color:red">Do not forget to change template name in request textbox. Please input it same as the pdf name that you are uploading.</span>
 
+<br>
 _**Example shown below**_
 
-
-
 https://user-images.githubusercontent.com/27823073/178200294-b19993d5-0377-4947-ba3b-3b8a3b049957.mov
-

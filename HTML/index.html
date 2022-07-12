@@ -33,40 +33,30 @@
 
             var formData = new FormData();
             formData.append('file', file);
-            fetch('http://localhost:3000/uploadTemplate', {
+            fetch('/uploadTemplate', {
                 method: 'POST',
                 body: formData
             }).then(function (response) {
-                return response.json();
+                return response;
             }).then(function (data) {
-                fetch('http://localhost:3000/addToTemplate', {
+                fetch('/addToTemplate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: request
                 }).then(function (response) {
-                    return response.json();
-                }).then(function (data) {
-                    // download the file
-                    // var a = document.createElement('a');
-                    // a.href = "data:application/pdf;base64," + data.bufferData;
-                    // a.download = "test.pdf";
-                    // a.click();
 
-                    var obj = document.createElement('object');
-                    obj.style.width = '100%';
-                    obj.style.height = '842pt';
-                    obj.type = 'application/pdf';
-                    obj.data = 'data:application/pdf;base64,' + data.bufferData;
-                    document.body.appendChild(obj);
+                    return response.blob();
 
+                }).then(function (blob) {
+                    console.log(blob);
+                    var url = URL.createObjectURL(blob);
+                    window.open(url);
                 });
             });
-
-
-
         });
+
     </script>
 
 </body>

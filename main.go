@@ -8,21 +8,18 @@
 package main
 
 import (
-	"os"
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"grrow_pdf/api"
 	"grrow_pdf/docs"
-	"grrow_pdf/env"
 )
 
 func main() {
-	env.Config()
+	// env.Config()
 
 	// Swagger 2.0 Meta Information
 	docs.SwaggerInfo.Title = "GROW PDF API"
@@ -45,15 +42,14 @@ func main() {
 		},
 	}))
 
-	// controllers.GetS3()
+	http.Handle("/", http.FileServer(http.Dir("HTML")))
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// handle api addtotemplate
+	http.HandleFunc("/addToTemplate", api.AddToTemplate)
 
-	// router.POST("/addData", api.GenerateTemp1)
-	router.POST("/addToTemplate", api.AddToTemplate)
+	// handle api uploadtemplate
+	http.HandleFunc("/uploadTemplate", api.UploadTemplate)
 
-	router.POST("/uploadTemplate", api.UploadTemplate)
-
-	router.Run(os.Getenv("PORT"))
+	http.ListenAndServe(":3000", nil)
 
 }

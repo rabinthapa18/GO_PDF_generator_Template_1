@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"grrow_pdf/controllers"
 	"grrow_pdf/models"
+	"net/http"
 	"reflect"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -14,20 +15,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// generate PDF with template api
-// @Summary      Create new pdf from scratch
-// @Description  Create new pdf from scratch
-// @Tags         GeneratePDF1
-// @Accept       multipart/form-data
-// @Produce      json
-// @Param        pdfData formData models.PdfData true "pdfData"
-// @Param		 products formData []string true "products"
-// @Param 	  	 logo formData file true "logo"
-// @Success      200  {string}  models.PdfData
-// @Failure      400  {string}  error
-// @Failure      404  {string}  error
-// @Failure      500  {string}  error
-// @Router       /addData [POST]
 func GenerateTemp1(pdfData *gin.Context) {
 
 	var newData models.PdfData
@@ -68,13 +55,16 @@ func GenerateTemp1(pdfData *gin.Context) {
 // @Failure      404  {string}  error
 // @Failure      500  {string}  error
 // @Router       /addToTemplate [POST]
-func AddToTemplate(rawData *gin.Context) {
+func AddToTemplate(res http.ResponseWriter, req *http.Request) {
 
 	var newData models.RawData
-	rawData.ShouldBind(&newData)
+	err := json.NewDecoder(req.Body).Decode(&newData)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	if newData.Products == nil {
-		products := rawData.PostForm("products")
+		products := req.FormValue("products")
 
 		isString := reflect.TypeOf(products) == reflect.TypeOf(" ")
 		if isString {
@@ -92,7 +82,7 @@ func AddToTemplate(rawData *gin.Context) {
 	}
 
 	if newData.LogoData.Height == 0 {
-		logoData := rawData.PostForm("logoData")
+		logoData := req.FormValue("logoData")
 		logoDataStruct := models.LogoData{}
 		err := json.Unmarshal([]byte(logoData), &logoDataStruct)
 		if err != nil {
@@ -102,8 +92,10 @@ func AddToTemplate(rawData *gin.Context) {
 	}
 
 	byteData := controllers.GeneratePDF(newData)
+	println(byteData)
 
-	rawData.JSON(200, gin.H{"bufferData": byteData})
+	// send response as json
+	res.Write(byteData)
 
 }
 
@@ -119,12 +111,15 @@ func AddToTemplate(rawData *gin.Context) {
 // @Failure      404  {string}  error
 // @Failure      500  {string}  error
 // @Router       /uploadTemplate [POST]
-func UploadTemplate(rawData *gin.Context) {
+func UploadTemplate(res http.ResponseWriter, req *http.Request) {
 
-	file, header, err := rawData.Request.FormFile("file")
+	req.ParseForm()
+	file, header, err := req.FormFile("file")
+	// file, header, err := rawData.Request.FormFile("file")
 
 	if err != nil {
-		rawData.JSON(400, gin.H{"error": err.Error()})
+		fmt.Println(err.Error())
+		res.Write([]byte("error"))
 		return
 	}
 
@@ -142,10 +137,12 @@ func UploadTemplate(rawData *gin.Context) {
 	})
 
 	if err != nil {
-		rawData.JSON(400, gin.H{"error": err.Error()})
+		fmt.Println(err.Error())
+		res.Write([]byte("error"))
 		return
 	}
 
-	rawData.JSON(200, gin.H{"result": result})
+	fmt.Println(result)
+	res.Write([]byte("success"))
 
 }
