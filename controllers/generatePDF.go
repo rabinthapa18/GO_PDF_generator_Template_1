@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"grrow_pdf/models"
 	"io/ioutil"
+	"os/exec"
 	"strconv"
 
 	npdf "github.com/dslipak/pdf"
@@ -27,6 +28,29 @@ func GeneratePDF(data models.RawData) []byte {
 	// saving the template file to storage
 	ioutil.WriteFile(pdfPath, temp, 0644)
 
+	// gs
+	// gs, err := ghostscript.NewInstance()
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+	// args := []string{
+	// 	"gswin64c",
+	// 	"-sDEVICE=pdfwrite",
+	// 	"-dCompatibilityLevel=1.4",
+	// 	"-dPDFSETTINGS=/screen",
+	// 	"-dNOPAUSE",
+	// 	"-dQUIET",
+	// 	"-dBATCH",
+	// 	"-sOutputFile=temp.pdf",
+	// 	"temp.pdf",
+	// }
+	// if err := gs.Init(args); err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+	// defer gs.Exit()
+
+	cmd := exec.Command("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
+	cmd.Run()
 	// Create a new PDF document =========================================
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
@@ -42,7 +66,7 @@ func GeneratePDF(data models.RawData) []byte {
 
 	// Add a page to the document ========================================
 	for i := 1; i <= numberOfPages; i++ {
-		page := gofpdi.ImportPage(pdf, "temp.pdf", i, "/MediaBox")
+		page := gofpdi.ImportPage(pdf, "temp2.pdf", i, "/MediaBox")
 
 		pdf.AddPage()
 
