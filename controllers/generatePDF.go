@@ -5,8 +5,9 @@ import (
 	"context"
 	"fmt"
 	"grrow_pdf/models"
+	"io"
 	"io/ioutil"
-	"os/exec"
+	"os"
 	"strconv"
 
 	npdf "github.com/dslipak/pdf"
@@ -28,45 +29,22 @@ func GeneratePDF(data models.RawData) []byte {
 	// saving the template file to storage
 	ioutil.WriteFile(pdfPath, temp, 0644)
 
-	// gs
-	// gs, err := ghostscript.NewInstance()
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-	// args := []string{
-	// 	"gswin64c",
-	// 	"-sDEVICE=pdfwrite",
-	// 	"-dCompatibilityLevel=1.4",
-	// 	"-dPDFSETTINGS=/screen",
-	// 	"-dNOPAUSE",
-	// 	"-dQUIET",
-	// 	"-dBATCH",
-	// 	"-sOutputFile=temp.pdf",
-	// 	"temp.pdf",
-	// }
-	// if err := gs.Init(args); err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-	// defer gs.Exit()
-
-	cmd := exec.Command("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
-	cmd.Run()
 	// Create a new PDF document =========================================
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
 	// get number of pages from template file ============================
-	contents, err := npdf.Open(pdfPath)
+	contents, err := npdf.Open("temp.pdf")
 	if err != nil {
 		panic(err)
 	}
 	numberOfPages := contents.NumPage()
 
 	// changing template received from api to readseeker==================
-	// template := io.ReadSeeker(bytes.NewReader(temp))
+	template := io.ReadSeeker(bytes.NewReader(temp))
 
 	// Add a page to the document ========================================
 	for i := 1; i <= numberOfPages; i++ {
-		page := gofpdi.ImportPage(pdf, "temp2.pdf", i, "/MediaBox")
+		page := gofpdi.ImportPageFromStream(pdf, &template, i, "/MediaBox")
 
 		pdf.AddPage()
 
@@ -77,25 +55,34 @@ func GeneratePDF(data models.RawData) []byte {
 	writeData(data, pdf, logoByte, sealByte)
 
 	// Output the document to a file =====================================
-	err = pdf.OutputFileAndClose(pdfPath)
+	err = pdf.OutputFileAndClose("temp.pdf")
 	if err != nil {
 		panic(err)
 	}
 
 	// change generated PDF to bytes
-	pdfBytes, err := ioutil.ReadFile(pdfPath)
+	pdfBytes, err := ioutil.ReadFile("temp.pdf")
 	if err != nil {
 		panic(err)
 	}
+
+	// pdf.ClosePath()
+	// pdf.Close()
 
 	// delete the PDF file from aws storage
 	deleteFile(data.Template)
 
 	// delete the PDF file from local storage
-	// err = os.Remove(pdfPath)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err = os.Remove(pdfPath)
+	if err != nil {
+		panic(err)
+	}
+
+	// delete temp2.pdf using cmd
+	// cmd = exec.Command("rm", "temp.pdf")
+	// cmd.Run()
+	// cmd = exec.Command("rm", "temp2.pdf")
+	// cmd.Run()
 
 	return pdfBytes
 }
@@ -141,9 +128,9 @@ func getFiles(tempInt string) ([]byte, []byte, []byte) {
 	// reading the seal file received via API
 	sealByte, _ := ioutil.ReadAll(req3.Body)
 
-	defer req1.Body.Close()
-	defer req2.Body.Close()
-	defer req3.Body.Close()
+	req1.Body.Close()
+	req2.Body.Close()
+	req3.Body.Close()
 
 	return temp, logoByte, sealByte
 

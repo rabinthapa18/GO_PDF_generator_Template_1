@@ -1,12 +1,15 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"grrow_pdf/controllers"
 	"grrow_pdf/models"
+	"io/ioutil"
 	"net/http"
+	"os/exec"
 	"reflect"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -56,6 +59,11 @@ func GenerateTemp1(pdfData *gin.Context) {
 // @Failure      500  {string}  error
 // @Router       /addToTemplate [POST]
 func AddToTemplate(res http.ResponseWriter, req *http.Request) {
+	//cors
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	res.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	//end cors
 
 	var newData models.RawData
 	err := json.NewDecoder(req.Body).Decode(&newData)
@@ -92,7 +100,6 @@ func AddToTemplate(res http.ResponseWriter, req *http.Request) {
 	}
 
 	byteData := controllers.GeneratePDF(newData)
-	println(byteData)
 
 	// send response as json
 	res.Write(byteData)
@@ -113,17 +120,40 @@ func AddToTemplate(res http.ResponseWriter, req *http.Request) {
 // @Router       /uploadTemplate [POST]
 func UploadTemplate(res http.ResponseWriter, req *http.Request) {
 
+	//cors
+	res.Header().Set("Access-Control-Allow-Origin", "*")
+	res.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	res.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	//end cors
+
 	req.ParseForm()
 	file, header, err := req.FormFile("file")
-	// file, header, err := rawData.Request.FormFile("file")
-
 	if err != nil {
 		fmt.Println(err.Error())
 		res.Write([]byte("error"))
 		return
 	}
 
-	defer file.Close()
+	//change file to byte
+	byteData, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Println(err.Error())
+		res.Write([]byte("error"))
+		return
+	}
+
+	// save file to local storage
+	ioutil.WriteFile("temp.pdf", byteData, 0644)
+
+	cmd := exec.Command("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
+	cmd.Run()
+
+	pdfByte, err := ioutil.ReadFile("temp2.pdf")
+	if err != nil {
+		fmt.Println(err.Error())
+		res.Write([]byte("error"))
+		return
+	}
 
 	filename := header.Filename
 
@@ -133,7 +163,7 @@ func UploadTemplate(res http.ResponseWriter, req *http.Request) {
 	result, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String("grrow.pdf.generator"),
 		Key:    aws.String(filename),
-		Body:   file,
+		Body:   bytes.NewReader(pdfByte),
 	})
 
 	if err != nil {
@@ -143,6 +173,12 @@ func UploadTemplate(res http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Println(result)
+
+	cmd = exec.Command("rm", "temp.pdf")
+	cmd.Run()
+	cmd = exec.Command("rm", "temp2.pdf")
+	cmd.Run()
+
 	res.Write([]byte("success"))
 
 }
