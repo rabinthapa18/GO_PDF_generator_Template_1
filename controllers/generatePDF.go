@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"strconv"
 
 	npdf "github.com/dslipak/pdf"
@@ -66,9 +67,6 @@ func GeneratePDF(data models.RawData) []byte {
 		panic(err)
 	}
 
-	// pdf.ClosePath()
-	// pdf.Close()
-
 	// delete the PDF file from aws storage
 	deleteFile(data.Template)
 
@@ -78,11 +76,10 @@ func GeneratePDF(data models.RawData) []byte {
 		panic(err)
 	}
 
-	// delete temp2.pdf using cmd
-	// cmd = exec.Command("rm", "temp.pdf")
-	// cmd.Run()
-	// cmd = exec.Command("rm", "temp2.pdf")
-	// cmd.Run()
+	cmd := exec.Command("rm", "temp.pdf")
+	cmd.Run()
+	cmd = exec.Command("rm", "temp2.pdf")
+	cmd.Run()
 
 	return pdfBytes
 }

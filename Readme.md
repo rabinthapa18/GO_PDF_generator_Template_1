@@ -17,7 +17,7 @@
 
 > **Template name should be same as name used during upload PDF api**
 
-> AFTER STARTING THE APP, YOU CAN VISIT "/" IN YOU BROWSER ACCORDING TO YOU SERVER AND USE IT (FOR EXAMPLE : "localhost:3000/"). THIS WILL REDIRECT YOU TO A PAGE WHERE YOU CAN UPLOAD AND WRITE DATA AND PDF WILL OPEN IN NEW PAGE.
+> AFTER STARTING THE APP, YOU CAN VISIT "/" IN YOU BROWSER ACCORDING TO YOU SERVER AND USE IT (FOR EXAMPLE : "localhost:3000/"). THIS WILL REDIRECT YOU TO A PAGE WHERE YOU CAN UPLOAD AND WRITE DATA AND PDF WILL OPEN IN NEW PAGE. YOU WILL HAVE TO ADD ENV VARIABLES IN DOCKERFILE
 
 ### <span style="color:red">Do not forget to change template name in request textbox. Please input it same as the pdf name that you are uploading.</span>
 
