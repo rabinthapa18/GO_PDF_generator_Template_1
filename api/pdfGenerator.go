@@ -150,7 +150,12 @@ func UploadTemplate(res http.ResponseWriter, req *http.Request) {
 	// cmd.Run()
 
 	cmd := exec.Command("gs", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
-	cmd.Run()
+	err = cmd.Run()
+	if err != nil {
+		fmt.Println(err.Error())
+		res.Write([]byte("error"))
+		return
+	}
 
 	pdfByte, err := ioutil.ReadFile("temp2.pdf")
 	if err != nil {

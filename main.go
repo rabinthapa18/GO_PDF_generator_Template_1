@@ -16,10 +16,11 @@ import (
 
 	"grrow_pdf/api"
 	"grrow_pdf/docs"
+	"grrow_pdf/env"
 )
 
 func main() {
-	// env.Config()
+	env.Config()
 
 	// Swagger 2.0 Meta Information
 	docs.SwaggerInfo.Title = "GROW PDF API"
