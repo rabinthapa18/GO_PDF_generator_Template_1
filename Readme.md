@@ -4,6 +4,11 @@
 
 ## GeneratePDF is generating PDF by specifying the coordinates.
 
+### Running docker image
+
+> <span class="colour" style="color: rgb(209, 210, 211);">docker run -e AWS_ACCESS_KEY_ID=''" -e AWS_SECRET_ACCESS_KEY=''" -p 3000:3000 IMAGE_NAME</span>
+
+<br>
 #### cURL request
 
 ##### For Uploading Template
@@ -19,9 +24,9 @@
 
 > AFTER STARTING THE APP, YOU CAN VISIT "/" IN YOU BROWSER ACCORDING TO YOU SERVER AND USE IT (FOR EXAMPLE : "localhost:3000/"). THIS WILL REDIRECT YOU TO A PAGE WHERE YOU CAN UPLOAD AND WRITE DATA AND PDF WILL OPEN IN NEW PAGE. YOU WILL HAVE TO ADD ENV VARIABLES IN DOCKERFILE
 
-### <span style="color:red">Do not forget to change template name in request textbox. Please input it same as the pdf name that you are uploading.</span>
+### <span class="colour" style="color:red">Do not forget to change template name in request textbox. Please input it same as the pdf name that you are uploading.</span>
 
 <br>
-_**Example shown below**_
+***Example shown below***
 
 https://user-images.githubusercontent.com/27823073/178200294-b19993d5-0377-4947-ba3b-3b8a3b049957.mov
