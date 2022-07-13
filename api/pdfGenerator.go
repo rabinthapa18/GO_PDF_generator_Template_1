@@ -146,7 +146,10 @@ func UploadTemplate(res http.ResponseWriter, req *http.Request) {
 	ioutil.WriteFile("temp.pdf", byteData, 0644)
 	ioutil.WriteFile("temp2.pdf", byteData, 0644)
 
-	cmd := exec.Command("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
+	// cmd := exec.Command("gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
+	// cmd.Run()
+
+	cmd := exec.Command("gs", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4", "-dPDFSETTINGS=/screen", "-dNOPAUSE", "-dQUIET", "-dBATCH", "-sOutputFile=temp2.pdf", "temp.pdf")
 	cmd.Run()
 
 	pdfByte, err := ioutil.ReadFile("temp2.pdf")

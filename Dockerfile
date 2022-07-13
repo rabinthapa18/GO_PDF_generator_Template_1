@@ -1,17 +1,9 @@
 FROM golang:latest
 
 WORKDIR /app
+RUN apt-get update
 
-# RUN export GO111MODULE=on
-# RUN go get -v github.com/aws/aws-sdk-go-v2
-
-# RUN cd /build/grrow_pdf && go build
-
-# RUN go mod init grrow_pdf
-
-# RUN cd / && go get -u
-
-# RUN go run main.go
+RUN apt-get install ghostscript -y 
 
 COPY go.mod . 
 COPY go.sum .
