@@ -134,18 +134,9 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
         "details":{
             "increment":6,
             "pageNo":1,
-            "name":{
-                "x":23,
-                "y":146
-            },
-            "quantity":{
-                "x":140,
-                "y":146
-            },
-            "price":{
-                "x":150,
-                "y":146
-            }
+            "name":{"x":23,"y":146},
+            "quantity":{"x":140,"y":146},
+            "price":{"x":150,"y":146}
         }
     },
     "values":{
