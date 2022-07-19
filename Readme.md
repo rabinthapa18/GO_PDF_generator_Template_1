@@ -97,4 +97,37 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
 `
 
 
-__*Please do not forget to set enviroment variables and set correct names of template and images names.*__
+### JSON request for addDataToTemplate
+`
+{
+    "template":"PDF_NAME_USED_DURING_UPLOAD_TEMPLATE_API.PDF",
+    "definitions":{
+        "texts": [
+            {"fieldName": "ClientName","x": 20,"y": 20,"size": 19,"pageNo":1},
+            {"fieldName": "AmountBilled","x": 30,"y": 30,"pageNo":1},
+            {"fieldName": "PaymentDueDate","x": 40,"y": 40,"pageNo":1}
+        ],
+        "images": [
+            {"name": "seal","x": 10,"y": 10,"width": 100,"height": 100,"pageNo":1},
+            {"name": "logo","x": 50,"y": 50,"width": 100,"height": 100,"pageNo":1}
+        ]
+    },
+    "values":{
+        "items": [
+      {"fieldName": "ClientName", "value": "株式会社 Jackpod"},
+      {"fieldName": "AmountBilled", "value": "¥100,000"},
+      {"fieldName": "PaymentDueDate", "value": "2022年10月30日"}
+    ],
+    "images": [
+      {"name": "seal", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API.png"},
+      {"name": "logo", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API.png"}
+    ]
+    }
+}
+`
+
+### **Things to remember**
+__*1. Please do not forget to set enviroment variables and set correct names of template and images names.*__
+__*2. Image names/objectKeys for images will be received via uploadImages API.*__
+__*3. Images should be in PNG format.*__
+__*4. "seal" in addDataToTemplate is the registered seal and "logo" is company logo. No other key-value pair will work*__
