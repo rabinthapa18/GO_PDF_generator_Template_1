@@ -70,7 +70,7 @@ curl --location --request POST 'localhost:3000/uploadImages' \
 curl --location --request POST 'localhost:3000/addDataToTemplate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "template":"pdf-template-1.pdf",
+    "template":"PDF_NAME_USED_DURING_UPLOAD_TEMPLATE_API.PDF",
     "definitions":{
         "texts": [
             {"fieldName": "ClientName","x": 20,"y": 20,"size": 19,"pageNo":1},
@@ -80,7 +80,23 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
         "images": [
             {"name": "seal","x": 10,"y": 10,"width": 100,"height": 100,"pageNo":1},
             {"name": "logo","x": 50,"y": 50,"width": 100,"height": 100,"pageNo":1}
-        ]
+        ],
+        "details":{
+            "increment":6,
+            "pageNo":1,
+            "name":{
+                "x":23,
+                "y":146
+            },
+            "quantity":{
+                "x":140,
+                "y":146
+            },
+            "price":{
+                "x":150,
+                "y":146
+            }
+        }
     },
     "values":{
         "items": [
@@ -91,6 +107,10 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
     "images": [
       {"name": "seal", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API"},
       {"name": "logo", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API"}
+    ],
+    "details":[
+        {"name":"p1","quantity":1,"price":100},
+        {"name":"p2","quantity":2,"price":200}
     ]
     }
 }'
@@ -110,7 +130,23 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
         "images": [
             {"name": "seal","x": 10,"y": 10,"width": 100,"height": 100,"pageNo":1},
             {"name": "logo","x": 50,"y": 50,"width": 100,"height": 100,"pageNo":1}
-        ]
+        ],
+        "details":{
+            "increment":6,
+            "pageNo":1,
+            "name":{
+                "x":23,
+                "y":146
+            },
+            "quantity":{
+                "x":140,
+                "y":146
+            },
+            "price":{
+                "x":150,
+                "y":146
+            }
+        }
     },
     "values":{
         "items": [
@@ -119,8 +155,12 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
       {"fieldName": "PaymentDueDate", "value": "2022年10月30日"}
     ],
     "images": [
-      {"name": "seal", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API.png"},
-      {"name": "logo", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API.png"}
+      {"name": "seal", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API"},
+      {"name": "logo", "objectKey": "KEY_RECIEVED_BY_UPLOAD_IMAGE_API"}
+    ],
+    "details":[
+        {"name":"p1","quantity":1,"price":100},
+        {"name":"p2","quantity":2,"price":200}
     ]
     }
 }
