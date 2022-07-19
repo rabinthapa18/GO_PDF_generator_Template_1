@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"strconv"
 
 	"grrow_pdf/models"
 
@@ -122,16 +123,13 @@ func writeDataToFile(value models.Values, definition models.Definitions, pdf *go
 		if v.Size == 0 {
 			v.Size = 12
 		}
-		fmt.Println(v.Size)
-		fmt.Println(v.PageNo)
 		pdf.SetPage(v.PageNo)
 		pdf.SetFont("Arial", "", float64(v.Size))
 		pdf.SetXY(float64(v.X), float64(v.Y))
 		for _, i := range value.Items {
 
 			if i.FieldName == v.FieldName {
-				fmt.Println("write data to pdf")
-				fmt.Println(i.Value)
+
 				pdf.Cell(40, 10, i.Value)
 			}
 		}
@@ -150,4 +148,26 @@ func writeDataToFile(value models.Values, definition models.Definitions, pdf *go
 			pdf.Image("logo", float64(v.X), float64(v.Y), float64(v.Width), float64(v.Height), false, "", 0, "")
 		}
 	}
+
+	// write details to pdf
+	for _, v := range value.Detail {
+		pdf.SetPage(definition.Details.PageNo)
+		pdf.SetFont("Arial", "", float64(definition.Details.Size))
+		if len(v.Name) > 0 {
+			pdf.SetXY(float64(definition.Details.Name.X), float64(definition.Details.Name.Y))
+			pdf.Cell(40, 10, v.Name)
+		}
+		if v.Quantity > 0 {
+			pdf.SetXY(float64(definition.Details.Quantity.X), float64(definition.Details.Quantity.Y))
+			pdf.Cell(40, 10, strconv.Itoa(v.Quantity))
+		}
+		if v.Price > 0 {
+			pdf.SetXY(float64(definition.Details.Price.X), float64(definition.Details.Price.Y))
+			pdf.Cell(40, 10, strconv.Itoa(v.Price))
+		}
+		definition.Details.Name.Y += definition.Details.IncrementY
+		definition.Details.Quantity.Y += definition.Details.IncrementY
+		definition.Details.Price.Y += definition.Details.IncrementY
+	}
+
 }

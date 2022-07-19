@@ -36,15 +36,12 @@ func AddDataToTemplate(res http.ResponseWriter, req *http.Request) {
 
 	// get template from body
 	template := newData.Template
-	fmt.Println("template:" + template)
 
 	// get difinitions from body
 	definitions := newData.Definitions
-	fmt.Println(definitions)
 
 	// get value from body
 	values := newData.Values
-	fmt.Println(values)
 
 	byteData := controllers.AddToTemplate(template, definitions, values)
 
