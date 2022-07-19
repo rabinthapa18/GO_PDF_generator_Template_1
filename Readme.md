@@ -95,4 +95,6 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
     }
 }'
 `
-                  
+
+
+__*Please do not forget to set enviroment variables and set correct names of template and images names.*__
