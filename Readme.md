@@ -26,6 +26,7 @@
           Request
                   TYPE          -     POST, MULTIPART/FORM
                   input keys    -     file
+                  
           Response
                   Message       -     Success
           </pre>
@@ -34,6 +35,7 @@
           Request
                   TYPE          -     POST, MULTIPART/FORM
                   input keys    -     seal, logo
+                  
           Response
                   logoImage     -     file name for logo
                   sealImage     -     file name for seal
@@ -43,6 +45,7 @@
           Request
                   TYPE          -     APPLICATION/JSON
                   input keys    -     template, definitions, values
+                  
           Response
                   PDF File
           </pre>
