@@ -24,9 +24,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/addToTemplate": {
+        "/addDataToTemplate": {
             "post": {
-                "description": "Create new pdf with positions",
+                "description": "Add data to template",
                 "consumes": [
                     "application/json"
                 ],
@@ -34,18 +34,75 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "GeneratePDF"
+                    "Add Data to Template"
                 ],
-                "summary": "Create new pdf with positions",
+                "summary": "Add data to template",
                 "parameters": [
                     {
-                        "description": "rawData",
-                        "name": "rawData",
+                        "description": "body",
+                        "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.RawData"
+                            "$ref": "#/definitions/models.RequestBody"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/uploadImages": {
+            "post": {
+                "description": "Upload images to S3",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Upload Images"
+                ],
+                "summary": "Upload images to S3",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "logo",
+                        "name": "logo",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "seal",
+                        "name": "seal",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -128,57 +185,62 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.LogoData": {
+        "models.Definitions": {
             "type": "object",
             "properties": {
-                "height": {
-                    "type": "integer"
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.image"
+                    }
                 },
-                "pageNo": {
-                    "type": "integer"
-                },
-                "width": {
-                    "type": "integer"
-                },
-                "x": {
-                    "type": "integer"
-                },
-                "y": {
-                    "type": "integer"
+                "texts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.text"
+                    }
                 }
             }
         },
-        "models.RawData": {
+        "models.RequestBody": {
             "type": "object",
             "properties": {
-                "address": {
-                    "$ref": "#/definitions/models.address"
-                },
-                "logoData": {
-                    "$ref": "#/definitions/models.LogoData"
-                },
-                "name": {
-                    "$ref": "#/definitions/models.name"
-                },
-                "phoneNumber": {
-                    "$ref": "#/definitions/models.phoneNumber"
-                },
-                "sealData": {
-                    "$ref": "#/definitions/models.SealData"
+                "definitions": {
+                    "$ref": "#/definitions/models.Definitions"
                 },
                 "template": {
                     "type": "string"
                 },
-                "zipAddress": {
-                    "$ref": "#/definitions/models.zipAddress"
+                "values": {
+                    "$ref": "#/definitions/models.Values"
                 }
             }
         },
-        "models.SealData": {
+        "models.Values": {
+            "type": "object",
+            "properties": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.images"
+                    }
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.item"
+                    }
+                }
+            }
+        },
+        "models.image": {
             "type": "object",
             "properties": {
                 "height": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 },
                 "pageNo": {
                     "type": "integer"
@@ -194,69 +256,34 @@ const docTemplate = `{
                 }
             }
         },
-        "models.address": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "pageNo": {
-                    "type": "integer"
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "x": {
-                    "type": "integer"
-                },
-                "y": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.name": {
+        "models.images": {
             "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
                 },
-                "pageNo": {
-                    "type": "integer"
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "x": {
-                    "type": "integer"
-                },
-                "y": {
-                    "type": "integer"
+                "objectKey": {
+                    "type": "string"
                 }
             }
         },
-        "models.phoneNumber": {
+        "models.item": {
             "type": "object",
             "properties": {
-                "pageNo": {
-                    "type": "integer"
+                "fieldName": {
+                    "type": "string"
                 },
-                "phoneNumber": {
-                    "type": "integer"
-                },
-                "size": {
-                    "type": "integer"
-                },
-                "x": {
-                    "type": "integer"
-                },
-                "y": {
-                    "type": "integer"
+                "value": {
+                    "type": "string"
                 }
             }
         },
-        "models.zipAddress": {
+        "models.text": {
             "type": "object",
             "properties": {
+                "fieldName": {
+                    "type": "string"
+                },
                 "pageNo": {
                     "type": "integer"
                 },
@@ -267,9 +294,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "y": {
-                    "type": "integer"
-                },
-                "zipAddress": {
                     "type": "integer"
                 }
             }

@@ -1,38 +1,41 @@
 definitions:
-  models.LogoData:
+  models.Definitions:
     properties:
-      height:
-        type: integer
-      pageNo:
-        type: integer
-      width:
-        type: integer
-      x:
-        type: integer
-      "y":
-        type: integer
+      images:
+        items:
+          $ref: '#/definitions/models.image'
+        type: array
+      texts:
+        items:
+          $ref: '#/definitions/models.text'
+        type: array
     type: object
-  models.RawData:
+  models.RequestBody:
     properties:
-      address:
-        $ref: '#/definitions/models.address'
-      logoData:
-        $ref: '#/definitions/models.LogoData'
-      name:
-        $ref: '#/definitions/models.name'
-      phoneNumber:
-        $ref: '#/definitions/models.phoneNumber'
-      sealData:
-        $ref: '#/definitions/models.SealData'
+      definitions:
+        $ref: '#/definitions/models.Definitions'
       template:
         type: string
-      zipAddress:
-        $ref: '#/definitions/models.zipAddress'
+      values:
+        $ref: '#/definitions/models.Values'
     type: object
-  models.SealData:
+  models.Values:
+    properties:
+      images:
+        items:
+          $ref: '#/definitions/models.images'
+        type: array
+      items:
+        items:
+          $ref: '#/definitions/models.item'
+        type: array
+    type: object
+  models.image:
     properties:
       height:
         type: integer
+      name:
+        type: string
       pageNo:
         type: integer
       width:
@@ -42,47 +45,24 @@ definitions:
       "y":
         type: integer
     type: object
-  models.address:
-    properties:
-      address:
-        type: string
-      pageNo:
-        type: integer
-      size:
-        type: integer
-      x:
-        type: integer
-      "y":
-        type: integer
-    type: object
-  models.name:
+  models.images:
     properties:
       name:
         type: string
-      pageNo:
-        type: integer
-      size:
-        type: integer
-      x:
-        type: integer
-      "y":
-        type: integer
+      objectKey:
+        type: string
     type: object
-  models.phoneNumber:
+  models.item:
     properties:
-      pageNo:
-        type: integer
-      phoneNumber:
-        type: integer
-      size:
-        type: integer
-      x:
-        type: integer
-      "y":
-        type: integer
+      fieldName:
+        type: string
+      value:
+        type: string
     type: object
-  models.zipAddress:
+  models.text:
     properties:
+      fieldName:
+        type: string
       pageNo:
         type: integer
       size:
@@ -90,8 +70,6 @@ definitions:
       x:
         type: integer
       "y":
-        type: integer
-      zipAddress:
         type: integer
     type: object
 info:
@@ -103,18 +81,56 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /addToTemplate:
+  /addDataToTemplate:
     post:
       consumes:
       - application/json
-      description: Create new pdf with positions
+      description: Add data to template
       parameters:
-      - description: rawData
+      - description: body
         in: body
-        name: rawData
+        name: body
         required: true
         schema:
-          $ref: '#/definitions/models.RawData'
+          $ref: '#/definitions/models.RequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add data to template
+      tags:
+      - Add Data to Template
+  /uploadImages:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload images to S3
+      parameters:
+      - description: logo
+        in: formData
+        name: logo
+        required: true
+        type: file
+      - description: seal
+        in: formData
+        name: seal
+        required: true
+        type: file
       produces:
       - application/json
       responses:
@@ -134,9 +150,9 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Create new pdf with positions
+      summary: Upload images to S3
       tags:
-      - GeneratePDF
+      - Upload Images
   /uploadTemplate:
     post:
       consumes:

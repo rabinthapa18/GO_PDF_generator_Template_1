@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -45,18 +47,17 @@ func GetS3() (awsS3Client *s3.Client) {
 
 	return awsS3Client
 
-	// paginator := s3.NewListObjectsV2Paginator(awsS3Client, &s3.ListObjectsV2Input{
-	// 	Bucket:    aws.String(BUCKET_NAME),
-	// 	Prefix:    aws.String(prefix),
-	// 	Delimiter: aws.String(delimeter),
-	// })
+}
 
-	// for paginator.HasMorePages() {
-	// 	page, _ := paginator.NextPage(context.TODO())
-	// 	for _, obj := range page.Contents {
-	// 		// Do whatever you need with each object "obj"
-	// 		fmt.Println("Content")
-	// 		fmt.Println(obj)
-	// 	}
-	// }
+// delete file from s3 server ============================================
+func deleteFile(key string) {
+	svc := GetS3()
+	input := &s3.DeleteObjectInput{
+		Bucket: aws.String("grrow.pdf.generator"),
+		Key:    aws.String(key),
+	}
+	_, err := svc.DeleteObject(context.TODO(), input)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }

@@ -16,10 +16,11 @@ import (
 
 	"grrow_pdf/api"
 	"grrow_pdf/docs"
+	"grrow_pdf/env"
 )
 
 func main() {
-	// env.Config()
+	env.Config()
 
 	// Swagger 2.0 Meta Information
 	docs.SwaggerInfo.Title = "GROW PDF API"
@@ -44,11 +45,13 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("HTML")))
 
-	// handle api addtotemplate
-	http.HandleFunc("/addToTemplate", api.AddToTemplate)
-
 	// handle api uploadtemplate
 	http.HandleFunc("/uploadTemplate", api.UploadTemplate)
+
+	// handle api uploadImages
+	http.HandleFunc("/uploadImages", api.UploadImages)
+
+	http.HandleFunc("/addDataToTemplate", api.AddDataToTemplate)
 
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
