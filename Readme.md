@@ -98,7 +98,7 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
 
 
 ### JSON request for addDataToTemplate
-`
+<pre>
 {
     "template":"PDF_NAME_USED_DURING_UPLOAD_TEMPLATE_API.PDF",
     "definitions":{
@@ -124,10 +124,11 @@ curl --location --request POST 'localhost:3000/addDataToTemplate' \
     ]
     }
 }
-`
+</pre>
 
 ### **Things to remember**
-__*1. Please do not forget to set enviroment variables and set correct names of template and images names.*__
-__*2. Image names/objectKeys for images will be received via uploadImages API.*__
-__*3. Images should be in PNG format.*__
-__*4. "seal" in addDataToTemplate is the registered seal and "logo" is company logo. No other key-value pair will work*__
+__*1. Please do not forget to set enviroment variables and set correct names of template and images names.*__<br/>
+__*2. Image names/objectKeys for images will be received via uploadImages API.*__<br/>
+__*3. Images should be in PNG format.*__<br/>
+__*4. "seal" in addDataToTemplate is the registered seal and "logo" is company logo. No other name will work.*__<br/>
+__*5. "fieldName" can be anything but make sure to that it remains same in both "definitions" and "values" or it wont be printed on template.*__
