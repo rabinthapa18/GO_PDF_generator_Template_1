@@ -84,6 +84,7 @@ PDF File
             {"name": "logo","x": 50,"y": 50,"width": 100,"height": 100,"pageNo":1}
         ],
         "details":{
+            // "size":10,   (this is optional, default is 12)
             "increment":5,
             "pageNo":1,
             "schema":[
