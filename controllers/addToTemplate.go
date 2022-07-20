@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"strconv"
 
 	"grrow_pdf/models"
 
@@ -59,7 +58,6 @@ func AddToTemplate(template string, definition models.Definitions, value models.
 	}
 
 	final := pdf.PageNo()
-	println(final)
 
 	// write data to pdf
 	writeDataToFile(value, definition, pdf, seal, logo)
@@ -149,25 +147,17 @@ func writeDataToFile(value models.Values, definition models.Definitions, pdf *go
 		}
 	}
 
-	// write details to pdf
-	for _, v := range value.Detail {
+	for _, v := range definition.Details.Schema {
 		pdf.SetPage(definition.Details.PageNo)
 		pdf.SetFont("Arial", "", float64(definition.Details.Size))
-		if len(v.Name) > 0 {
-			pdf.SetXY(float64(definition.Details.Name.X), float64(definition.Details.Name.Y))
-			pdf.Cell(40, 10, v.Name)
+		for _, i := range value.Details {
+			for _, j := range i {
+				if j.FieldName == v.FieldName {
+					pdf.SetXY(float64(v.X), float64(v.Y))
+					pdf.Cell(40, 10, j.Value)
+					v.Y = v.Y + definition.Details.IncrementY
+				}
+			}
 		}
-		if v.Quantity > 0 {
-			pdf.SetXY(float64(definition.Details.Quantity.X), float64(definition.Details.Quantity.Y))
-			pdf.Cell(40, 10, strconv.Itoa(v.Quantity))
-		}
-		if v.Price > 0 {
-			pdf.SetXY(float64(definition.Details.Price.X), float64(definition.Details.Price.Y))
-			pdf.Cell(40, 10, strconv.Itoa(v.Price))
-		}
-		definition.Details.Name.Y += definition.Details.IncrementY
-		definition.Details.Quantity.Y += definition.Details.IncrementY
-		definition.Details.Price.Y += definition.Details.IncrementY
 	}
-
 }

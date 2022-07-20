@@ -24,15 +24,14 @@ type image struct {
 }
 
 type details struct {
-	Name       schema `json:"name"`
-	Quantity   schema `json:"quantity"`
-	Price      schema `json:"price"`
-	IncrementY int    `json:"increment"`
-	PageNo     int    `json:"pageNo"`
-	Size       int    `json:"size"`
+	Schema     []schema `json:"schema"`
+	IncrementY int      `json:"increment"`
+	PageNo     int      `json:"pageNo"`
+	Size       int      `json:"size"`
 }
 
 type schema struct {
-	X int `json:"x"`
-	Y int `json:"y"`
+	FieldName string `json:"fieldName"`
+	X         int    `json:"x"`
+	Y         int    `json:"y"`
 }
